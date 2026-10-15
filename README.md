@@ -1,408 +1,155 @@
-Yes. Based on the actual project report, research paper, and the results already produced, here is a **complete README.md** you can paste directly into GitHub. I’m not adding random claims that aren't supported by your project.
-
-```markdown
 # Corporate Bankruptcy Prediction Using Machine Learning
 
-A machine learning classification project for predicting whether a company is likely to become bankrupt based on financial indicators.
+A machine learning project that predicts corporate bankruptcy using financial indicators from the Polish Companies Bankruptcy Dataset.
 
 ## 📌 Project Overview
 
-Corporate bankruptcy prediction is a binary classification problem in which financial indicators are used to determine whether a company belongs to the bankrupt or non-bankrupt class.
+Corporate bankruptcy prediction is a binary classification problem that uses financial data to identify companies that may be at risk of bankruptcy.
 
-The main objective of this project is to implement and compare multiple machine learning classification algorithms on the Polish Companies Bankruptcy Dataset and study how different models perform on a highly imbalanced dataset.
+This project implements and compares six machine learning models discussed in a reference research study and extends the comparison using Random Forest. An additional Balanced Random Forest experiment investigates the impact of class weighting on minority-class bankruptcy detection.
 
-The project reproduces the major models discussed in the reference research paper and extends the comparison with Random Forest. An additional Balanced Random Forest experiment was performed to investigate the effect of class imbalance.
-
----
+The project emphasizes not only overall predictive performance but also the challenges of detecting bankrupt companies in a highly imbalanced dataset.
 
 ## 🎯 Objectives
 
-The project aims to:
-
 - Predict corporate bankruptcy using financial indicators.
-- Implement multiple machine learning classification algorithms.
-- Compare the performance of different classifiers using the same dataset and train-test split.
-- Evaluate models using accuracy, log loss, precision, recall, F1-score and confusion matrix.
+- Implement and compare six reference models.
+- Extend the comparison using Random Forest.
+- Evaluate performance using accuracy, log loss, precision, recall, and F1-score.
 - Perform 5-fold stratified cross-validation.
-- Analyze the effect of severe class imbalance on bankruptcy detection.
-- Extend the reference-model comparison using Random Forest.
-- Investigate whether class weighting with Balanced Random Forest improves minority-class detection.
-
----
+- Analyze the impact of class imbalance on bankruptcy prediction.
+- Investigate whether Balanced Random Forest improves minority-class detection.
 
 ## 📊 Dataset
 
-The project uses the **Polish Companies Bankruptcy Dataset** obtained from the UCI Machine Learning Repository.
-
-The selected dataset is the **third-year forecasting dataset (`3year.arff`)**, containing financial information about Polish companies.
-
-### Dataset Characteristics
+**Dataset:** Polish Companies Bankruptcy Dataset  
+**Source:** UCI Machine Learning Repository  
+**Selected file:** `3year.arff`
 
 | Property | Value |
 |---|---:|
-| Total companies | 10,503 |
+| Total instances | 10,503 |
 | Financial features | 64 |
-| Target classes | 2 |
 | Non-bankrupt companies | 10,008 |
 | Bankrupt companies | 495 |
+| Classification type | Binary |
 
-The target variable represents whether a company is bankrupt or non-bankrupt.
-
-The dataset is highly imbalanced because the number of non-bankrupt companies is substantially larger than the number of bankrupt companies.
-
-This class imbalance is an important part of the project because a model can achieve high overall accuracy while still performing poorly at detecting bankrupt companies.
-
----
+The dataset is highly imbalanced, with substantially more non-bankrupt companies than bankrupt companies. Consequently, a model can achieve high accuracy while failing to detect many actual bankruptcies.
 
 ## 🧹 Data Preprocessing
 
-The ARFF dataset was loaded and converted into a Pandas DataFrame.
+The following preprocessing steps were performed:
 
-The preprocessing workflow consisted of the following steps:
+1. Loaded the ARFF dataset into a Pandas DataFrame.
+2. Separated the financial features and target variable.
+3. Handled missing values using mean imputation.
+4. Split the data into training and testing sets using an 80:20 stratified split.
+5. Used the same split for all models to ensure a consistent comparison.
+6. Included imputation within the cross-validation pipeline to prevent data leakage.
 
-1. Load the dataset.
-2. Separate the target variable from the 64 financial features.
-3. Handle missing values using mean imputation.
-4. Perform an 80:20 stratified train-test split.
-5. Use the same train-test split for all models to ensure a consistent comparison.
-6. No feature standardization was applied.
+| Dataset split | Instances |
+|---|---:|
+| Training set | 8,402 |
+| Testing set | 2,101 |
 
-### Missing Value Handling
-
-Missing values were handled using **mean imputation**.
-
-The imputer was fitted using the training data and subsequently applied to the test data.
-
-For cross-validation, mean imputation was included inside the cross-validation pipeline to prevent data leakage.
-
-### Train-Test Split
-
-An 80:20 stratified split was used.
-
-```text
-Training set: 8,402 instances
-Testing set:  2,101 instances
-```
-
-The stratification preserves the class distribution between the training and testing datasets.
-
----
+Feature standardization was not applied in the reported experimental workflow.
 
 ## 🔬 Methodology
 
-The overall workflow of the project is:
-
 ```text
-Dataset
-   ↓
-Data Loading
-   ↓
-Missing Value Handling
-   ↓
-Mean Imputation
-   ↓
-Target / Feature Separation
-   ↓
-80:20 Stratified Train-Test Split
-   ↓
-Model Training
-   ↓
-Prediction
-   ↓
-Evaluation
-   ↓
+Dataset Loading
+       ↓
+Data Preprocessing
+       ↓
+Missing Value Imputation
+       ↓
+Stratified Train-Test Split
+       ↓
+Model Training and Prediction
+       ↓
+Performance Evaluation
+       ↓
 5-Fold Stratified Cross-Validation
-   ↓
+       ↓
 Model Comparison
-   ↓
+       ↓
 Class Imbalance Analysis
 ```
 
-The same train-test split was used for all models so that their performance could be compared fairly.
+## 🤖 Machine Learning Models
 
----
+### Reference Models
 
-# 🤖 Machine Learning Models
+The project implements the six models investigated in the reference study.
 
-The project implements seven classifiers.
+1. **Logistic Regression:** Estimates the probability of bankruptcy using a logistic function.
+2. **Support Vector Machine (SVM):** Identifies a decision boundary that separates the classes.
+3. **Multilayer Perceptron (MLP):** A neural network capable of learning nonlinear patterns.
+4. **Bernoulli Naive Bayes:** A probabilistic classifier based on Bayes' theorem and conditional independence assumptions.
+5. **XGBoost:** A gradient boosting algorithm that combines multiple decision trees.
+6. **LightGBM:** A gradient boosting framework designed for efficient tree-based learning.
 
-## 1. Logistic Regression
+### Additional Model: Random Forest
 
-Logistic Regression is a linear classification algorithm that models the probability of a binary outcome using the logistic/sigmoid function.
+Random Forest was added as an extension to the reference-model comparison. It combines predictions from multiple decision trees to produce a final classification.
 
-The reference research paper used L2 regularization to reduce overfitting and control large model weights.
+### Balanced Random Forest Experiment
 
----
+An additional experiment investigated the effect of class weighting on bankruptcy detection. The aim was to improve the model's ability to identify companies belonging to the minority bankruptcy class.
 
-## 2. Support Vector Machine (SVM)
+## 📏 Evaluation Metrics
 
-Support Vector Machine is a supervised classification algorithm that attempts to find a separating hyperplane with a large margin between classes.
+The models were evaluated using the following metrics:
 
-The reference study investigated SVM for bankruptcy prediction and reported strong performance.
+- **Accuracy:** Proportion of correctly classified companies.
+- **Log Loss:** Measures the quality of predicted probabilities; lower values are better.
+- **Precision:** Proportion of predicted bankrupt companies that were actually bankrupt.
+- **Recall:** Proportion of actual bankrupt companies correctly identified.
+- **F1-score:** Harmonic mean of precision and recall.
+- **Confusion Matrix:** Summarizes true positives, true negatives, false positives, and false negatives.
 
----
+Five-fold stratified cross-validation was also used to examine model performance across multiple data splits.
 
-## 3. Neural Network / MLP
+## 📈 Model Comparison Results
 
-A Neural Network was used as another nonlinear classification approach.
-
-The reference study used a neural network architecture with hidden layers and investigated its ability to predict corporate bankruptcy from financial indicators.
-
----
-
-## 4. Bernoulli Naive Bayes
-
-Bernoulli Naive Bayes is a probabilistic classifier based on Bayes' theorem and the assumption of conditional independence between features given the class.
-
-The reference research specifically used the Bernoulli Naive Bayes model.
-
----
-
-## 5. XGBoost
-
-XGBoost is an implementation of gradient boosting designed to build an ensemble of prediction models.
-
-The reference study investigated Extreme Gradient Boosting and used regularization to control overfitting.
-
----
-
-## 6. LightGBM
-
-LightGBM is a gradient boosting framework based on tree-based learning algorithms and histogram-based optimization.
-
-It is designed to provide efficient training and prediction performance.
-
----
-
-## 7. Random Forest — Extension
-
-Random Forest was introduced as an extension to the reference-model comparison.
-
-Random Forest is an ensemble learning method that combines multiple decision trees to produce a final prediction.
-
-It was evaluated using the same dataset, preprocessing strategy and train-test split as the other models.
-
----
-
-# ⚖️ Balanced Random Forest Experiment
-
-Because the dataset contains only 495 bankrupt companies compared with 10,008 non-bankrupt companies, class imbalance is a major issue.
-
-An additional **Balanced Random Forest** experiment was therefore conducted using class weighting.
-
-The purpose was to determine whether giving greater importance to the minority bankruptcy class could improve bankruptcy detection.
-
-The experiment specifically examined:
-
-- Accuracy
-- Bankruptcy precision
-- Bankruptcy recall
-- Bankruptcy F1-score
-
-The result showed that class weighting increased bankruptcy precision but did not improve bankruptcy recall.
-
----
-
-# 📏 Evaluation Metrics
-
-The models were evaluated using multiple metrics rather than relying only on accuracy.
-
-## Accuracy
-
-Measures the overall proportion of correctly classified companies.
-
-```text
-Accuracy = Correct Predictions / Total Predictions
-```
-
-Although useful, accuracy can be misleading for highly imbalanced datasets.
-
----
-
-## Log Loss
-
-Log Loss evaluates the quality of the predicted probabilities.
-
-Lower values indicate better probabilistic predictions.
-
----
-
-## Precision
-
-Precision measures how many companies predicted as bankrupt were actually bankrupt.
-
-```text
-Precision = True Positives / (True Positives + False Positives)
-```
-
-High precision means that when the model predicts bankruptcy, the prediction is more likely to be correct.
-
----
-
-## Recall
-
-Recall measures how many of the actual bankrupt companies were successfully detected.
-
-```text
-Recall = True Positives / (True Positives + False Negatives)
-```
-
-For this project, recall is particularly important because failing to identify an actually bankrupt company can be more important than overall classification accuracy.
-
----
-
-## F1-Score
-
-F1-score provides a balance between precision and recall.
-
-```text
-F1 = 2 × (Precision × Recall) / (Precision + Recall)
-```
-
----
-
-## Confusion Matrix
-
-The confusion matrix provides a class-by-class view of correct and incorrect predictions.
-
-It helps identify:
-
-- True negatives
-- False positives
-- False negatives
-- True positives
-
----
-
-# 🔁 Cross-Validation
-
-A **5-fold Stratified Cross-Validation** procedure was performed to evaluate model consistency.
-
-Stratification ensures that each fold maintains a representative distribution of the two target classes.
-
-Mean imputation was included inside the cross-validation pipeline to prevent information from the validation folds from leaking into the training process.
-
-The following cross-validation metrics were recorded:
-
-- Mean CV Accuracy
-- Mean CV Log Loss
-
----
-
-# 📈 Results
-
-The following table summarizes the model comparison obtained in the project.
+The following results were obtained in the reported experiments.
 
 | Model | Test Accuracy | Test Log Loss | CV Accuracy | CV Log Loss |
 |---|---:|---:|---:|---:|
 | Logistic Regression | 95.10% | 0.222 | 95.12% | 0.219 |
 | SVM | 95.29% | 0.190 | 95.29% | 0.190 |
-| Neural Network | 95.29% | 0.189 | 95.29% | 0.188 |
+| Neural Network (MLP) | 95.29% | 0.189 | 95.29% | 0.188 |
 | Bernoulli Naive Bayes | 76.39% | 2.326 | 76.44% | 2.442 |
 | XGBoost | 95.29% | 0.178 | 95.29% | 0.175 |
 | LightGBM | 95.29% | 0.178 | 95.29% | 0.174 |
 | **Random Forest** | **95.86%** | **0.190** | **96.03%** | **0.171** |
 
-Random Forest achieved the highest observed test accuracy and cross-validation accuracy among the models evaluated in this project.
+Random Forest achieved the highest test accuracy and cross-validation accuracy among the evaluated models.
 
----
+## ⚖️ Class Imbalance Analysis
 
-# ⚠️ Class Imbalance Results
-
-The dataset's class imbalance significantly affected bankruptcy detection.
-
-The Balanced Random Forest experiment produced:
+The additional Balanced Random Forest experiment produced the following results.
 
 | Metric | Random Forest | Balanced Random Forest |
 |---|---:|---:|
 | Accuracy | 95.86% | 95.95% |
-| Bankruptcy Precision | 75% | **89%** |
-| Bankruptcy Recall | **18%** | 16% |
-| Bankruptcy F1 | 29% | 27% |
+| Bankruptcy Precision | 75% | 89% |
+| Bankruptcy Recall | 18% | 16% |
+| Bankruptcy F1-score | 29% | 27% |
 
-The Balanced Random Forest increased bankruptcy precision from **75% to 89%**.
+Balanced Random Forest increased bankruptcy precision but reduced recall. Therefore, the experiment did not demonstrate an improvement in identifying a larger proportion of actual bankrupt companies.
 
-However, bankruptcy recall decreased from **18% to 16%**.
+These findings highlight the limitations of relying on accuracy alone when evaluating models on imbalanced datasets.
 
-Therefore, class weighting alone did not improve the detection of the minority bankruptcy class in this experiment.
+## 🔎 Key Findings
 
----
+1. **Random Forest achieved the highest overall accuracy:** It recorded 95.86% test accuracy and 96.03% cross-validation accuracy.
+2. **High accuracy did not guarantee effective bankruptcy detection:** The original Random Forest recall for the bankruptcy class was only 18%.
+3. **Class weighting had mixed results:** Balanced Random Forest improved precision to 89%, but recall decreased to 16%.
+4. **Bernoulli Naive Bayes performed comparatively poorly:** Its test accuracy was 76.39%.
+5. **Multiple evaluation metrics are essential:** Precision, recall, F1-score, and confusion matrices provide information that accuracy alone cannot capture.
 
-# 🔎 Key Findings
-
-The experiments produced several important observations.
-
-### 1. Random Forest achieved the highest overall performance
-
-Random Forest achieved:
-
-```text
-Test Accuracy: 95.86%
-Cross-Validation Accuracy: 96.03%
-Cross-Validation Log Loss: 0.171
-```
-
-among the models evaluated in the project.
-
-### 2. Accuracy alone is not sufficient
-
-The dataset is highly imbalanced, with:
-
-```text
-10,008 non-bankrupt companies
-495 bankrupt companies
-```
-
-Therefore, a model can obtain high overall accuracy while still failing to identify a large proportion of bankrupt companies.
-
-### 3. Bankruptcy recall remains low
-
-Despite high overall accuracy, the original Random Forest detected only 18% of the actual bankrupt companies.
-
-This demonstrates why minority-class recall must be considered alongside accuracy.
-
-### 4. Balanced Random Forest increased precision but reduced recall
-
-The Balanced Random Forest achieved:
-
-```text
-Bankruptcy Precision: 89%
-Bankruptcy Recall:    16%
-Bankruptcy F1-score:  27%
-```
-
-This means the model became more precise when predicting bankruptcy, but it detected an even smaller proportion of the actual bankrupt companies.
-
-### 5. Bernoulli Naive Bayes performed substantially worse
-
-Bernoulli Naive Bayes achieved:
-
-```text
-Test Accuracy: 76.39%
-Test Log Loss: 2.326
-```
-
-which was substantially weaker than the other evaluated models.
-
----
-
-# 🧠 Interpretation
-
-The results demonstrate an important issue in financial classification:
-
-> High overall accuracy does not necessarily mean that a model is effective at identifying bankrupt companies.
-
-Because bankruptcy is the minority class, evaluation should not rely solely on accuracy.
-
-Precision, recall and F1-score for the bankruptcy class provide additional information about how effectively the model detects financially distressed companies.
-
-The Balanced Random Forest experiment further demonstrated that simply applying class weighting does not automatically solve the minority-class detection problem.
-
----
-
-# 🛠️ Technologies Used
-
-The project was implemented in Python using:
+## 🛠️ Technologies Used
 
 - Python
 - Pandas
@@ -414,210 +161,90 @@ The project was implemented in Python using:
 - Matplotlib
 - Jupyter Notebook
 
----
-
-# 📁 Project Structure
+## 📁 Project Structure
 
 ```text
 Corporate-Bankruptcy-Prediction-ML/
 │
 ├── 3year.arff
-│
 ├── Notebook.ipynb
-│
 ├── final_model_results.csv
-│
 ├── balanced_random_forest_results.csv
-│
 ├── README.md
-│
 └── Corporate-Bankruptcy-Prediction-Using-Machine-Learning.pdf
 ```
 
-The exact filenames may vary depending on the version of the project uploaded to the repository.
+*Note: Update the filenames above to match the files actually present in your GitHub repository.*
 
----
+## 🔄 Research Reproduction and Extension
 
-# 📓 Notebook
+The project has two main components.
 
-The Jupyter Notebook contains the implementation of the complete machine learning workflow, including:
-
-1. Dataset loading
-2. Data exploration
-3. Missing-value analysis
-4. Mean imputation
-5. Feature and target separation
-6. Train-test splitting
-7. Model training
-8. Model prediction
-9. Metric calculation
-10. Confusion matrix generation
-11. Cross-validation
-12. Model comparison
-13. Random Forest extension
-14. Balanced Random Forest experiment
-15. Final result analysis
-
----
-
-# 🔬 Research Paper
-
-The project is based on a research study on corporate bankruptcy prediction using financial indicators of Polish companies.
-
-The reference study investigated:
+**Part 1: Reference-model comparison**
 
 - Logistic Regression
 - Support Vector Machine
 - Neural Network
-- Naive Bayes
-- Extreme Gradient Boosting
-- Light Gradient Boosting Machine
+- Bernoulli Naive Bayes
+- XGBoost
+- LightGBM
 
-The study evaluated models using accuracy, log loss, training time and confusion matrices.
+**Part 2: Additional experiments**
 
-The research paper reported that SVM performed strongly in its original experiments, while Logistic Regression and Neural Network also showed strong performance. Naive Bayes performed comparatively poorly, and the gradient boosting approaches required further investigation.
+- Random Forest
+- Balanced Random Forest
 
-This project reproduces the reference-model comparison while adding Random Forest as an extension.
+The additional experiments extend the comparison and examine whether class weighting improves the detection of bankrupt companies.
 
----
+## ⚠️ Limitations
 
-# 🔄 Reproduction and Extension
+- The dataset contains substantially fewer bankrupt companies than non-bankrupt companies.
+- High overall accuracy can conceal poor minority-class recall.
+- Class weighting alone did not improve bankruptcy recall in the reported Balanced Random Forest experiment.
+- Feature standardization was not applied in the reported workflow.
+- The results are based on the selected dataset and experimental setup and should not be interpreted as proof of real-world predictive performance.
 
-The project consists of two major parts.
+## 🚀 Future Work
 
-## Part 1 — Reproduction
+Potential improvements include:
 
-The following six models correspond to the models investigated in the reference study:
+- Hyperparameter tuning.
+- Feature selection and feature engineering.
+- Oversampling techniques such as SMOTE.
+- Undersampling and other class-imbalance methods.
+- Decision-threshold optimization.
+- Cost-sensitive learning.
+- Evaluation using ROC-AUC and PR-AUC.
+- Explainable machine learning techniques.
+- Further experiments with ensemble classifiers.
 
-```text
-1. Logistic Regression
-2. Support Vector Machine
-3. Neural Network
-4. Bernoulli Naive Bayes
-5. XGBoost
-6. LightGBM
-```
+## 👥 Team Members
 
-The models were evaluated using the same dataset and a consistent experimental workflow.
-
-## Part 2 — Extension
-
-Random Forest was added as an additional machine learning model:
-
-```text
-Random Forest
-```
-
-The extension was followed by an additional experiment:
-
-```text
-Balanced Random Forest
-```
-
-to investigate whether class weighting could improve minority-class bankruptcy detection.
-
----
-
-# 📌 Limitations
-
-The project has several limitations.
-
-### Class Imbalance
-
-The dataset is strongly imbalanced toward non-bankrupt companies.
-
-This makes overall accuracy less informative when evaluating bankruptcy detection.
-
-### Minority-Class Detection
-
-The models achieved high overall accuracy but relatively low recall for the bankruptcy class.
-
-### Feature Standardization
-
-Feature standardization was not applied, following the methodology used in the project/reference approach.
-
-### Class Weighting
-
-The Balanced Random Forest experiment showed that class weighting alone was insufficient to improve bankruptcy recall.
-
----
-
-# 🚀 Future Work
-
-Possible directions for future improvement include:
-
-- Synthetic feature generation
-- More advanced class-imbalance techniques
-- Oversampling methods such as SMOTE
-- Undersampling techniques
-- Hyperparameter optimization
-- Threshold optimization for bankruptcy detection
-- Feature selection
-- Feature engineering
-- Ensemble methods
-- Cost-sensitive learning
-- Explainable machine learning
-- Additional evaluation using ROC-AUC and PR-AUC
-- Comparison with additional modern classification models
-
-The reference study itself suggested exploring synthetic feature generation and newer approaches to improve performance on this type of data.
-
----
-
-# 👥 Team Members
-
-### Amoghaar R
+**Amoghaar R**  
 PES University  
 SRN: PES2UG24CS625
 
-### Ramya
+**Ramya**  
 PES University  
 SRN: PES2UG24CS653
 
----
+## 📚 References
 
-# 📚 References
-
-1. Reference research paper — *Corporate Bankruptcy Prediction*.
-2. Polish Companies Bankruptcy Dataset — UCI Machine Learning Repository.
+1. Reference research paper on corporate bankruptcy prediction.
+2. Polish Companies Bankruptcy Dataset, UCI Machine Learning Repository.
 3. Scikit-learn documentation.
 4. XGBoost documentation.
 5. LightGBM documentation.
-6. Relevant research literature on corporate bankruptcy prediction and machine learning.
+6. Research literature on machine learning for corporate bankruptcy prediction.
 
----
+*Replace the generic research-paper reference with the exact title, authors, publication venue, year, and DOI or URL of the paper used in the project.*
 
-# 📜 Conclusion
+## 📌 Conclusion
 
-This project implemented and compared multiple machine learning classification algorithms for predicting corporate bankruptcy using financial indicators from the Polish Companies Bankruptcy Dataset.
+This project compared six reference machine learning models and extended the experiments with Random Forest and Balanced Random Forest for corporate bankruptcy prediction.
 
-Random Forest produced the highest observed overall and cross-validation accuracy in the extended experiment.
+Random Forest achieved the highest observed overall accuracy among the evaluated models. However, its low bankruptcy recall demonstrated that strong overall performance does not necessarily translate into effective detection of financially distressed companies.
 
-However, the results also demonstrate that high accuracy does not necessarily translate into effective detection of bankrupt companies because of the severe class imbalance.
+The Balanced Random Forest experiment increased precision but reduced recall, indicating that class weighting alone was insufficient to improve minority-class detection.
 
-The Balanced Random Forest experiment increased bankruptcy precision but reduced bankruptcy recall, showing that class weighting alone was not sufficient to improve minority-class detection.
-
-Therefore, corporate bankruptcy prediction should be evaluated using a combination of:
-
-```text
-Accuracy
-+
-Precision
-+
-Recall
-+
-F1-Score
-+
-Log Loss
-+
-Confusion Matrix
-```
-
-rather than relying on accuracy alone.
-```
-
-One important correction compared with some of the earlier PPT wording: **Random Forest is the extension, not one of the six reference models.** Your own project report explicitly describes the six reference models and then Random Forest as the additional model, followed by the Balanced Random Forest experiment. :chatgpt-content-reference{index="0"}
-
-Also, the actual project report confirms the dataset size, 64 features, 80:20 split, mean imputation, 5-fold stratified CV, and the final results above. :chatgpt-content-reference{index="1"} :chatgpt-content-reference{index="2"}
-
-This is the version I'd put in the GitHub repository.
+The results emphasize the importance of evaluating bankruptcy prediction systems using multiple metrics, particularly recall, precision, F1-score, and confusion matrices, alongside accuracy and log loss.
